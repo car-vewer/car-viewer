@@ -1,105 +1,87 @@
 package main
-import (
-        "fmt"
-        "net/http"
-        "io"
-        "encoding/json"
-        "strings"
-        "strconv"
-    )
 
-type Specifications struct {
-    Engine string `json:"engine"`
-    Horsepower int `json:"horsepower"`
-    Transmission string `json:"transmission"`
-    Drivetrain string `json:"drivetrain"`
+import (
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"io"
+	"log"
+	"net/http"
+)
+
+const carsAPI = "http://localhost:3000/api"
+
+type Specification struct {
+	Engine       string `json:"engine"`
+	Horsepower   int    `json:"horsepower"`
+	Transmission string `json:"transmission"`
+	Drivetrain   string `json:"drivetrain"`
 }
 
 type Car struct {
-    Id int `json:"id"`
-    Name string `json:"name"`
-    ManufacturerId int `json:"manufacturerId"`
-    CategoryId int `json:"categoryId"`
-    Year int `json:"year"`
-    Specifications Specifications `json:"specifications"`
-    Image string `json:"image"`
+	ID             int           `json:"id"`
+	Name           string        `json:"name"`
+	ManufacturerID int           `json:"manufacturerId"`
+	CategoryID     int           `json:"categoryId"`
+	Year           int           `json:"year"`
+	Specifications Specification `json:"specifications"`
+	Image          string        `json:"image"`
 }
 
-func carViewer(w http.ResponseWriter, r *http.Request) {
-    response, err := http.Get("http://localhost:3000/api/models")
-    if err != nil {
-        fmt.Println("ERROR: ", err)
-        return
-    }
-    carId := strings.TrimPrefix(r.URL.Path, "/cars/")
-    id, err2 := strconv.Atoi(carId)
-    if err2 != nil {
-        fmt.Println("ERROR: ", err2)
-        return
-    }
-    defer response.Body.Close()
+func fetchAPI(endpoint string) ([]byte, error) {
+	response, err := http.Get(carsAPI + endpoint)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
 
-    jsonData, err1 := io.ReadAll(response.Body)
-        if err1 != nil {
-        fmt.Println("ERROR: ", err1)
-        return
-    }
-    var cars []Car
-    json.Unmarshal(jsonData, &cars)
-    for _, car := range cars {
-        if car.Id == id {
-            response.Header.Set("Content-Type", "application/json")
-            json.NewEncoder(w).Encode(car)
-            return
-        }
-    }
-   // response.Header.Set("Content-Type", "application/json")
-   // json.NewEncoder(w).Encode(car)
-  //  w.Write([]byte(car.Name))
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API returned status: %d", response.StatusCode)
+	}
+
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
-func manViewer(w http.ResponseWriter, r *http.Request) {
-    response, err := http.Get("http://localhost:3000/api/manufacturers")
-    if err != nil {
-        fmt.Println("ERROR: ", err)
-        return
-    }
-    defer response.Body.Close()
+func getCars() ([]Car, error) {
+	data, err := fetchAPI("/models")
+	if err != nil {
+		return nil, err
+	}
 
-    jsonData, err1 := io.ReadAll(response.Body)
-        if err1 != nil {
-        fmt.Println("ERROR: ", err1)
-        return
-    }
-    response.Header.Set("Content-Type", "application/json")
-    w.Write(jsonData)
+	var cars []Car
+
+	err = json.Unmarshal(data, &cars)
+	if err != nil {
+		return nil, err
+	}
+
+	return cars, nil
 }
 
-func catViewer(w http.ResponseWriter, r *http.Request) {
-    response, err := http.Get("http://localhost:3000/api/categories")
-    if err != nil {
-        fmt.Println("ERROR: ", err)
-        return
-    }
-    defer response.Body.Close()
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	cars, err := getCars()
+	if err != nil {
+		http.Error(w, "Server issue: could not load cars right now.", http.StatusInternalServerError)
+		return
+	}
 
-    jsonData, err1 := io.ReadAll(response.Body)
-        if err1 != nil {
-        fmt.Println("ERROR: ", err1)
-        return
-    }
-    response.Header.Set("Content-Type", "application/json")
-    w.Write(jsonData)
+	tmpl, err := template.ParseFiles("index.html")
+	if err != nil {
+		http.Error(w, "Server issue: could not load page template.", http.StatusInternalServerError)
+		return
+	}
+
+	tmpl.Execute(w, cars)
 }
+
 
 func main() {
-    http.HandleFunc("/cars/", carViewer)
-    http.HandleFunc("/manufacturers", manViewer)
-    http.HandleFunc("/categories", catViewer)
-    render := "Server is running on http://localhost:8084/"
-    fmt.Println(render)
-    err := http.ListenAndServe(":8084", nil)
-    if err != nil {
-        fmt.Println("ERROR: ", err)
-    }
+	http.HandleFunc("/", homeHandler)
+	log.Println("Server is running on http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

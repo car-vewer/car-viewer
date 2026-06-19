@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cars Viewer</title>
+</head>
+<body>
+    <h1>Cars Viewer</h1>
+
+    {{range .}}
+        <div style="border: 1px solid #ccc; padding: 15px; margin: 15px;">
+            <img 
+                src="http://localhost:3000/api/images/{{.Image}}" 
+                alt="{{.Name}}" 
+                width="300"
+            >
+
+            <h2>{{.Name}}</h2>
+
+            <p><strong>Year:</strong> {{.Year}}</p>
+
+            <h3>Specifications</h3>
+            <p><strong>Engine:</strong> {{.Specifications.Engine}}</p>
+            <p><strong>Horsepower:</strong> {{.Specifications.Horsepower}}</p>
+            <p><strong>Transmission:</strong> {{.Specifications.Transmission}}</p>
+            <p><strong>Drivetrain:</strong> {{.Specifications.Drivetrain}}</p>
+
+        </div>
+    {{end}}
+</body>
+</html>
