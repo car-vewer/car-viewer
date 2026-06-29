@@ -4,6 +4,97 @@
     <meta charset="UTF-8">
     <title>Cars Viewer</title>
 </head>
+<form method="GET" action="/" class="search-form">
+    <input 
+        type="text"
+        name="search"
+        placeholder="Search by car name..."
+        value="{{.Filters.Search}}"
+    >
+
+    <button type="submit">Search</button>
+    <a href="/">Reset</a>
+</form>
+
+<details class="advanced-filter">
+    <summary>Advanced filtering</summary>
+
+    <form method="GET" action="/" class="advanced-form">
+
+
+        <select name="manufacturer">
+            <option value="">Any manufacturer</option>
+            {{range .ManufacturerOptions}}
+                <option value="{{.}}" {{if eq . $.Filters.Manufacturer}}selected{{end}}>
+                    {{.}}
+                </option>
+            {{end}}
+        </select>
+
+        <select name="country">
+            <option value="">Any country</option>
+            {{range .CountryOptions}}
+                <option value="{{.}}" {{if eq . $.Filters.Country}}selected{{end}}>
+                    {{.}}
+                </option>
+            {{end}}
+        </select>
+
+        <select name="category">
+            <option value="">Any category</option>
+            {{range .CategoryOptions}}
+                <option value="{{.}}" {{if eq . $.Filters.Category}}selected{{end}}>
+                    {{.}}
+                </option>
+            {{end}}
+        </select>
+
+        <input 
+            type="number" 
+            name="minYear" 
+            placeholder="Min year" 
+            value="{{.Filters.MinYear}}"
+        >
+
+        <select name="engine">
+            <option value="">Any engine</option>
+            {{range .EngineOptions}}
+                <option value="{{.}}" {{if eq . $.Filters.Engine}}selected{{end}}>
+                    {{.}}
+                </option>
+            {{end}}
+        </select>
+
+        <input 
+            type="number" 
+            name="minHorsepower" 
+            placeholder="Min horsepower" 
+            value="{{.Filters.MinHorsepower}}"
+        >
+
+        <select name="transmission">
+            <option value="">Any transmission</option>
+            {{range .TransmissionOptions}}
+                <option value="{{.}}" {{if eq . $.Filters.Transmission}}selected{{end}}>
+                    {{.}}
+                </option>
+            {{end}}
+        </select>
+
+        <select name="drivetrain">
+            <option value="">Any drivetrain</option>
+            {{range .DrivetrainOptions}}
+                <option value="{{.}}" {{if eq . $.Filters.Drivetrain}}selected{{end}}>
+                    {{.}}
+                </option>
+            {{end}}
+        </select>
+
+        <button type="submit">Apply filters</button>
+        <a href="/">Clear filters</a>
+    </form>
+</details>
+
 <body>
     <a href="/" style="text-decoration: none; color: inherit;">
         <h1>Cars Viewer</h1>

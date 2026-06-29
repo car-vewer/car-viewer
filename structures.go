@@ -29,6 +29,31 @@ type Manufacturer struct {
 	Country  string `json:"country"`
 }
 
+type PageData struct {
+	Filters FilterOptions
+
+	ManufacturerOptions []string
+	CountryOptions      []string
+	CategoryOptions     []string
+	EngineOptions       []string
+	TransmissionOptions []string
+	DrivetrainOptions   []string
+
+	Mains []Main
+}
+
+type FilterOptions struct {
+	Search        string
+	Manufacturer  string
+	Country       string
+	Category      string
+	MinYear       string
+	Engine        string
+	MinHorsepower string
+	Transmission  string
+	Drivetrain    string
+}
+
 type Main struct {
 	ID             		 int
 	Name           		 string
@@ -37,6 +62,11 @@ type Main struct {
 	ManufacturerName     string
 	ManufacturerCountry  string
 	CategoryName 		 string
+
+	Engine       string
+	Horsepower   int
+	Transmission string
+	Drivetrain   string
 }
 
 type  dataResult struct {

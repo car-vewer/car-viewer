@@ -54,6 +54,11 @@ func makeMain(cars []Car, categories []Category, manufacturers []Manufacturer) [
 			ManufacturerName: manName,
 			ManufacturerCountry: manCountry,
 			CategoryName: catName,
+
+			Engine: car.Specifications.Engine,
+			Horsepower: car.Specifications.Horsepower,
+			Transmission: car.Specifications.Transmission,
+			Drivetrain: car.Specifications.Drivetrain,
 		}
 		mains = append(mains, main)
 	}
