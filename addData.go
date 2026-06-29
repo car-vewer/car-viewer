@@ -66,7 +66,7 @@ func makeMain(cars []Car, categories []Category, manufacturers []Manufacturer) [
 }
 
 func getCars() ([]Car, error) {
-	data, err := fetchAPI("/models")
+	data, err := fetchAPI("/models/")
 	if err != nil {
 		return nil, err
 	}
@@ -111,4 +111,23 @@ func getManufacturers() ([]Manufacturer, error) {
 	}
 
 	return manufacturers, nil
+}
+
+
+func getCar(id string) (Car, error) {
+	data, err := fetchAPI("/models/" + id)
+
+	var car Car
+
+	if err != nil {
+		return car, err
+	}
+
+	
+	err = json.Unmarshal(data, &car)
+	if err != nil {
+		return car, err
+	}
+
+	return car, nil
 }

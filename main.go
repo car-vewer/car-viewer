@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 )
 
 const carsAPI = "http://localhost:3000/api"
@@ -93,9 +94,27 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func specsHandler(w http.ResponseWriter, r *http.Request){
+	
+	url := r.URL.Path
+	parts := strings.Split(strings.TrimPrefix(url, "/"), "/")
+	id :=  parts[1]
+	car, err := getCar(id)
+	if err != nil {
+		http.Error(w, "Server issue: could not load cars right now.", http.StatusInternalServerError)
+			return
+	}
+
+		tmpl, err := template.ParseFiles("specs.html")
+		tmpl.Execute(w,car)
+}
+
 
 func main() {
-	http.HandleFunc("/", homeHandler)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /", homeHandler)
+	mux.HandleFunc("GET /specifications/", specsHandler)
 	log.Println("Server is running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
