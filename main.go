@@ -123,9 +123,12 @@ func specsHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	//mux := http.NewServeMux()
-	http.HandleFunc("GET /", homeHandler)
-	http.HandleFunc("GET /specifications/", specsHandler)
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /", homeHandler)
+	mux.HandleFunc("GET /specifications/", specsHandler)
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
 	log.Println("Server is running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
