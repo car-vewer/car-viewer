@@ -27,6 +27,7 @@ type Manufacturer struct {
 	ID       int `json:"id"`
 	Name string `json:"name"`
 	Country  string `json:"country"`
+	FoundingYear int `json:"foundingYear"`
 }
 
 type PageData struct {
@@ -61,6 +62,7 @@ type Main struct {
 	Image          		 string
 	ManufacturerName     string
 	ManufacturerCountry  string
+	ManufacturerYear  	 int
 	CategoryName 		 string
 
 	Engine       string

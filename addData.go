@@ -29,14 +29,16 @@ func fetchAPI(endpoint string) ([]byte, error) {
 func makeMain(cars []Car, categories []Category, manufacturers []Manufacturer) []Main {
 
 	var mains []Main
-	for  _,  car := range cars {
+	for _, car := range cars {
 		manName := "NO"
 		manCountry := "NO"
+		manYear := 0
 		catName := "NO"
 		for _, manufacturer := range manufacturers {
 			if manufacturer.ID == car.ManufacturerID {
 				manName = manufacturer.Name
 				manCountry = manufacturer.Country
+				manYear = manufacturer.FoundingYear
 				break
 			}
 		}
@@ -47,18 +49,19 @@ func makeMain(cars []Car, categories []Category, manufacturers []Manufacturer) [
 			}
 		}
 		main := Main{
-			ID: car.ID,
-			Name: car.Name,
-			Year: car.Year,
-			Image: car.Image,
-			ManufacturerName: manName,
+			ID:                  car.ID,
+			Name:                car.Name,
+			Year:                car.Year,
+			Image:               car.Image,
+			ManufacturerName:    manName,
 			ManufacturerCountry: manCountry,
-			CategoryName: catName,
+			ManufacturerYear:    manYear,
+			CategoryName:        catName,
 
-			Engine: car.Specifications.Engine,
-			Horsepower: car.Specifications.Horsepower,
+			Engine:       car.Specifications.Engine,
+			Horsepower:   car.Specifications.Horsepower,
 			Transmission: car.Specifications.Transmission,
-			Drivetrain: car.Specifications.Drivetrain,
+			Drivetrain:   car.Specifications.Drivetrain,
 		}
 		mains = append(mains, main)
 	}
@@ -113,7 +116,6 @@ func getManufacturers() ([]Manufacturer, error) {
 	return manufacturers, nil
 }
 
-
 func getCar(id string) (Car, error) {
 	data, err := fetchAPI("/models/" + id)
 
@@ -123,7 +125,6 @@ func getCar(id string) (Car, error) {
 		return car, err
 	}
 
-	
 	err = json.Unmarshal(data, &car)
 	if err != nil {
 		return car, err

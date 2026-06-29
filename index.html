@@ -99,7 +99,7 @@
     <a href="/" style="text-decoration: none; color: inherit;">
         <h1>Cars Viewer</h1>
     </a>
-    {{range .}}
+    {{range .Mains}}
         <div style="border: 1px solid #ccc; padding: 15px; margin: 15px;">
             <img 
                 src="http://localhost:3000/api/images/{{.Image}}" 
@@ -112,6 +112,7 @@
 
             <p><strong>Manufacturer Name:</strong> {{.ManufacturerName}}</p>
             <p><strong>Manufacturer Country:</strong> {{.ManufacturerCountry}}</p>
+            <p><strong>Founding Year:</strong> {{.ManufacturerYear}}</p>
             <p><strong>Category Name:</strong> {{.CategoryName}}</p>
             <a href="specifications/{{.ID}}" class="button">Specifications</a>
         </div>
