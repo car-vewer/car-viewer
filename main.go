@@ -54,13 +54,43 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	mains := makeMain(cars, categories, manufacturers)
+	filters := FilterOptions{
+		Search:        r.URL.Query().Get("search"),
+		Manufacturer:  r.URL.Query().Get("manufacturer"),
+		Country:       r.URL.Query().Get("country"),
+		Category:      r.URL.Query().Get("category"),
+		MinYear:       r.URL.Query().Get("minYear"),
+		Engine:        r.URL.Query().Get("engine"),
+		MinHorsepower: r.URL.Query().Get("minHorsepower"),
+		Transmission:  r.URL.Query().Get("transmission"),
+		Drivetrain:    r.URL.Query().Get("drivetrain"),
+	}
+	//mains = filterCarCardsByName(mains, search)
+	optionsData := getUniqueOptions(mains)
+	filteredCards := filterMainCards(mains, filters)
+	pageData := PageData{
+		Filters: filters,
+
+		ManufacturerOptions: optionsData.ManufacturerOptions,
+		CountryOptions:      optionsData.CountryOptions,
+		CategoryOptions:     optionsData.CategoryOptions,
+		EngineOptions:       optionsData.EngineOptions,
+		TransmissionOptions: optionsData.TransmissionOptions,
+		DrivetrainOptions:   optionsData.DrivetrainOptions,
+
+		Mains: filteredCards,
+	}
 	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
-		http.Error(w, "Server issue: could not load page template.", http.StatusInternalServerError)
+		http.Error(w, "Server issue: page template could not be loaded.", http.StatusInternalServerError)
 		return
 	}
 
-	tmpl.Execute(w, mains)
+	err = tmpl.Execute(w, pageData)
+	if err != nil {
+		http.Error(w, "Server issue: page could not be rendered.", http.StatusInternalServerError)
+		return
+	}
 }
 
 
