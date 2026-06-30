@@ -7,8 +7,19 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="top"></div>
+    <a class="logo" href="/">
+        <h1 class="logo">CARSVIEWER</h1>
+    </a>
+
+    <div class="container">    
     <div class="filters">
+    <a href="#top" id="topBtn">🡅</a>
+
+    <div style="text-align:center; margin:20px 0; color:#bfbfbf;">
+        Showing {{len .Mains}} car{{if ne (len .Mains) 1}}s{{end}}
+    </div>
+    
         <form method="GET" action="/" class="search-form">
             <input 
                 type="text"
@@ -100,10 +111,13 @@
             </form>
         </details>
     </div>
-    <a class="logo" href="/">
-        <h1>Cars Viewer</h1>
-    </a>
     <div class="cars-grid">
+        {{if eq (len .Mains) 0}}
+            <div style="text-align:center; padding:60px 20px; color:#bfbfbf;">
+            <h2>No cars found</h2>
+            <p>Try adjusting your filters or <a href="/" style="text-decoration: none; color:rgb(255, 255, 255);">reset them</a></p>
+        </div>
+        {{else}}
         {{range .Mains}}
             <div class="car-card">
                 <a href="/specifications/{{.ID}}">
@@ -140,7 +154,9 @@
                 </div>
                 
             <a href="/specifications/{{.ID}}" class="button">Specifications</a>
-            </div>            
+            
+            </div>   
+            {{end}}         
         {{end}}
     </div>
 </div>
