@@ -1,9 +1,9 @@
 
 build:
-	npm install
+	npm.cmd install
 
 run:
-	npm start
+	npm.cmd start
 
 
 re: build run

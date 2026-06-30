@@ -10,6 +10,10 @@ import (
 const carsAPI = "http://localhost:3000/api"
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	result := make(chan dataResult)
 	go func() {
 		cars, err := getCars()
@@ -41,7 +45,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < 3; i++ {
 		finalData := <-result
 		if finalData.Error != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+		//	w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, "Server issue: could not load categories right now.", http.StatusInternalServerError)
 			return
 		}
@@ -84,18 +88,18 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	//	w.WriteHeader(http.StatusInternalServerError)
 		http.Error(w, "Server issue: page template could not be loaded.", http.StatusInternalServerError)
 		return
 	}
 
 	err = tmpl.Execute(w, pageData)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	//	w.WriteHeader(http.StatusInternalServerError)
 		http.Error(w, "Server issue: page could not be rendered.", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	//w.WriteHeader(http.StatusOK)
 }
 
 func specsHandler(w http.ResponseWriter, r *http.Request) {
@@ -105,19 +109,19 @@ func specsHandler(w http.ResponseWriter, r *http.Request) {
 	id := parts[1]
 	car, err := getCar(id)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		http.Error(w, "Server issue: could not load cars right now.", http.StatusInternalServerError)
+	//	w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Server issue: could not load car details for this index.", http.StatusInternalServerError)
 		return
 	}
 
 	tmpl, err := template.ParseFiles("specs.html")
 	err = tmpl.Execute(w, car)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	//	w.WriteHeader(http.StatusInternalServerError)
 		http.Error(w, "Server issue: page could not be rendered.", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	//w.WriteHeader(http.StatusOK)
 
 }
 
