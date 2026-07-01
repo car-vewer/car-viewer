@@ -1,191 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cars Viewer</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cars Viewer</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
 
-<body>
-    <div id="top"></div>
+    <body>
+        <div id="top"></div>
 
-    <a class="logo" href="/">
-        <h1 class="logo">CARSVIEWER</h1>
-    </a>
-
-    <div style="text-align:center; margin: 10px 0 25px 0;">
-        <a href="/comparison">
-            Show comparison ({{.CompareCount}}/2)
+        <a class="logo" href="/">
+            <h1 class="logo">CARSVIEWER</h1>
         </a>
-    </div>
 
-    <div class="container">    
-        <div class="filters">
-            <a href="#top" id="topBtn">🡅</a>
-
-            <div style="text-align:center; margin:20px 0; color:#bfbfbf;">
-                Showing {{len .Mains}} car{{if ne (len .Mains) 1}}s{{end}}
-            </div>
-            
-            <form method="GET" action="/" class="search-form">
-                <input 
-                    type="text"
-                    name="search"
-                    placeholder="Search by car name..."
-                    value="{{.Filters.Search}}"
-                >
-
-                <button type="submit">Search</button>
-                <a href="/">Reset</a>
-            </form>
-
-            <details class="advanced-filter">
-                <summary>Advanced filtering</summary>
-
-                <form method="GET" action="/" class="advanced-form">
-
-                    <select name="manufacturer">
-                        <option value="">Any manufacturer</option>
-                        {{range .ManufacturerOptions}}
-                            <option value="{{.}}" {{if eq . $.Filters.Manufacturer}}selected{{end}}>
-                                {{.}}
-                            </option>
-                        {{end}}
-                    </select>
-
-                    <select name="country">
-                        <option value="">Any country</option>
-                        {{range .CountryOptions}}
-                            <option value="{{.}}" {{if eq . $.Filters.Country}}selected{{end}}>
-                                {{.}}
-                            </option>
-                        {{end}}
-                    </select>
-
-                    <select name="category">
-                        <option value="">Any category</option>
-                        {{range .CategoryOptions}}
-                            <option value="{{.}}" {{if eq . $.Filters.Category}}selected{{end}}>
-                                {{.}}
-                            </option>
-                        {{end}}
-                    </select>
-
-                    <input 
-                        type="number" 
-                        name="minYear" 
-                        placeholder="Min year" 
-                        value="{{.Filters.MinYear}}"
-                    >
-
-                    <select name="engine">
-                        <option value="">Any engine</option>
-                        {{range .EngineOptions}}
-                            <option value="{{.}}" {{if eq . $.Filters.Engine}}selected{{end}}>
-                                {{.}}
-                            </option>
-                        {{end}}
-                    </select>
-
-                    <input 
-                        type="number" 
-                        name="minHorsepower" 
-                        placeholder="Min horsepower" 
-                        value="{{.Filters.MinHorsepower}}"
-                    >
-
-                    <select name="transmission">
-                        <option value="">Any transmission</option>
-                        {{range .TransmissionOptions}}
-                            <option value="{{.}}" {{if eq . $.Filters.Transmission}}selected{{end}}>
-                                {{.}}
-                            </option>
-                        {{end}}
-                    </select>
-
-                    <select name="drivetrain">
-                        <option value="">Any drivetrain</option>
-                        {{range .DrivetrainOptions}}
-                            <option value="{{.}}" {{if eq . $.Filters.Drivetrain}}selected{{end}}>
-                                {{.}}
-                            </option>
-                        {{end}}
-                    </select>
-
-                    <button type="submit">Apply filters</button>
-                    <a href="/">Clear filters</a>
-                </form>
-            </details>
+        <div style="text-align:center; margin: 10px 0 25px 0;">
+            <a href="/comparison" class="compare-link">
+                Show comparison ({{.CompareCount}}/2)
+            </a>
         </div>
 
-        <div class="cars-grid">
-            {{if eq (len .Mains) 0}}
-                <div style="text-align:center; padding:60px 20px; color:#bfbfbf;">
-                    <h2>No cars found</h2>
-                    <p>
-                        Try adjusting your filters or 
-                        <a href="/" style="text-decoration: none; color:rgb(255, 255, 255);">
-                            reset them
-                        </a>
-                    </p>
+        <div class="container">    
+            <div class="filters">
+                <a href="#top" id="topBtn">🡅</a>
+
+                <div style="text-align:center; margin:20px 0; color:#bfbfbf;">
+                    Showing {{len .Mains}} car{{if ne (len .Mains) 1}}s{{end}}
                 </div>
-            {{else}}
-                {{range .Mains}}
-                    <div class="car-card">
-                        <a href="/specifications/{{.ID}}">
-                            <img class="home-image"
-                                src="http://localhost:3000/api/images/{{.Image}}" 
-                                alt="{{.Name}}" 
-                                width="300"
-                            >
-                        </a>
+                
+                <form method="GET" action="/" class="search-form">
+                    <input 
+                        type="text"
+                        name="search"
+                        placeholder="Search by car name..."
+                        value="{{.Filters.Search}}"
+                    >
 
-                        <h2>{{.Name}}</h2>
+                    <button type="submit">Search</button>
+                    <a href="/">Reset</a>
+                </form>
 
-                        <div class="info-row">
-                            <span class="label">Year</span>
-                            <span>{{.Year}}</span>
-                        </div>
-                        
-                        <div class="info-row">
-                            <span class="label">Manufacturer</span>
-                            <span>{{.ManufacturerName}}</span>
-                        </div>
-                        
-                        <div class="info-row">
-                            <span class="label">Country</span>
-                            <span>{{.ManufacturerCountry}}</span>
-                        </div>
+                <details class="advanced-filter">
+                    <summary>Advanced filtering</summary>
 
-                        <div class="info-row">
-                            <span class="label">Founding Year</span>
-                            <span>{{.ManufacturerYear}}</span>
-                        </div>
+                    <form method="GET" action="/" class="advanced-form">
 
-                        <div class="info-row">
-                            <span class="label">Category</span>
-                            <span>{{.CategoryName}}</span>
-                        </div>
-                        
-                        <a href="/specifications/{{.ID}}" class="button">
-                            Specifications
-                        </a>
+                        <select name="manufacturer">
+                            <option value="">Any manufacturer</option>
+                            {{range .ManufacturerOptions}}
+                                <option value="{{.}}" {{if eq . $.Filters.Manufacturer}}selected{{end}}>
+                                    {{.}}
+                                </option>
+                            {{end}}
+                        </select>
 
-                        {{if .IsCompared}}
-                            <form method="POST" action="/comparison/remove" style="display: inline;">
-                                <input type="hidden" name="id" value="{{.ID}}">
-                                <button type="submit" class="button">Remove from comparison</button>
-                            </form>
-                        {{else}}
-                            <form method="POST" action="/comparison/add" style="display: inline;">
-                                <input type="hidden" name="id" value="{{.ID}}">
-                                <button type="submit" class="button">Add to comparison</button>
-                            </form>
-                        {{end}}
-                    </div>   
-                {{end}}         
-            {{end}}
+                        <select name="country">
+                            <option value="">Any country</option>
+                            {{range .CountryOptions}}
+                                <option value="{{.}}" {{if eq . $.Filters.Country}}selected{{end}}>
+                                    {{.}}
+                                </option>
+                            {{end}}
+                        </select>
+
+                        <select name="category">
+                            <option value="">Any category</option>
+                            {{range .CategoryOptions}}
+                                <option value="{{.}}" {{if eq . $.Filters.Category}}selected{{end}}>
+                                    {{.}}
+                                </option>
+                            {{end}}
+                        </select>
+
+                        <input 
+                            type="number" 
+                            name="minYear" 
+                            placeholder="Min year" 
+                            value="{{.Filters.MinYear}}"
+                        >
+
+                        <select name="engine">
+                            <option value="">Any engine</option>
+                            {{range .EngineOptions}}
+                                <option value="{{.}}" {{if eq . $.Filters.Engine}}selected{{end}}>
+                                    {{.}}
+                                </option>
+                            {{end}}
+                        </select>
+
+                        <input 
+                            type="number" 
+                            name="minHorsepower" 
+                            placeholder="Min horsepower" 
+                            value="{{.Filters.MinHorsepower}}"
+                        >
+
+                        <select name="transmission">
+                            <option value="">Any transmission</option>
+                            {{range .TransmissionOptions}}
+                                <option value="{{.}}" {{if eq . $.Filters.Transmission}}selected{{end}}>
+                                    {{.}}
+                                </option>
+                            {{end}}
+                        </select>
+
+                        <select name="drivetrain">
+                            <option value="">Any drivetrain</option>
+                            {{range .DrivetrainOptions}}
+                                <option value="{{.}}" {{if eq . $.Filters.Drivetrain}}selected{{end}}>
+                                    {{.}}
+                                </option>
+                            {{end}}
+                        </select>
+
+                        <button type="submit">Apply filters</button>
+                        <a href="/">Clear filters</a>
+                    </form>
+                </details>
+            </div>
+
+            <div class="cars-grid">
+                {{if eq (len .Mains) 0}}
+                    <div style="text-align:center; padding:60px 20px; color:#bfbfbf;">
+                        <h2>No cars found</h2>
+                        <p>
+                            Try adjusting your filters or 
+                            <a href="/" style="text-decoration: none; color:rgb(255, 255, 255);">
+                                reset them
+                            </a>
+                        </p>
+                    </div>
+                {{else}}
+                    {{range .Mains}}
+                        <div class="car-card">
+                            <a href="/specifications/{{.ID}}">
+                                <img class="home-image"
+                                    src="http://localhost:3000/api/images/{{.Image}}" 
+                                    alt="{{.Name}}" 
+                                    width="300"
+                                >
+                            </a>
+
+                            <h2>{{.Name}}</h2>
+
+                            <div class="info-row">
+                                <span class="label">Year</span>
+                                <span>{{.Year}}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="label">Manufacturer</span>
+                                <span>{{.ManufacturerName}}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="label">Country</span>
+                                <span>{{.ManufacturerCountry}}</span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="label">Founding Year</span>
+                                <span>{{.ManufacturerYear}}</span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="label">Category</span>
+                                <span>{{.CategoryName}}</span>
+                            </div>
+                            
+                            <a href="/specifications/{{.ID}}" class="button">
+                                Specifications
+                            </a>
+
+                            {{if .IsCompared}}
+                                <form method="POST" action="/comparison/remove" style="display: inline;">
+                                    <input type="hidden" name="id" value="{{.ID}}">
+                                    <button type="submit" class="compare-btn">Remove</button>
+                                </form>
+                            {{else}}
+                                <form method="POST" action="/comparison/add" style="display: inline;">
+                                    <input type="hidden" name="id" value="{{.ID}}">
+                                    <button type="submit" class="compare-btn">Add to comparison</button>
+                                </form>
+                            {{end}}
+                        </div>   
+                    {{end}}         
+                {{end}}
+            </div>
         </div>
-    </div>
-</body>
-</html>
+    </body>
+    </html>
