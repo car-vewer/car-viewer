@@ -3,43 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Comparison</title>
-        <link rel="stylesheet" href="/static/style.css">
-
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <a href="/" style="text-decoration: none; color: inherit;">
+        <h1 class="logo">CARSVIEWER</h1>
+    </a>
+<div class="container">
+    <div style="text-align:center; margin: 10px 0 25px 0;">
+        <a href="/" class="back-link">← Back to main page</a>
+    </div>
 
-    <h1>Car comparison</h1>
-
-    <a href="/">Back to main page</a>
+    <h1 style="text-align:center; margin-bottom: 30px; font-size: 2rem; font-weight: 600;">
+        Car Comparison
+    </h1>
 
     {{if .Cars}}
-        {{range .Cars}}
-            <div class="cars-grid">
-                <h2>{{.Name}}</h2>
+        <div class="comparison-grid">
+            {{range .Cars}}
+                <div class="comparison-card">
+                    <img 
+                        src="http://localhost:3000/api/images/{{.Image}}" 
+                        alt="{{.Name}}"
+                    >
+                    <h2>{{.Name}}</h2>
 
-                <img src="http://localhost:3000/api/images/{{.Image}}" alt="{{.Name}}" width="300">
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Year</span>
+                        <span class="comparison-value">{{.Year}}</span>
+                    </div>
 
-                <p><strong>Year:</strong> {{.Year}}</p>
-                <p><strong>Manufacturer:</strong> {{.ManufacturerName}}</p>
-                <p><strong>Country:</strong> {{.ManufacturerCountry}}</p>
-                <p><strong>Category:</strong> {{.CategoryName}}</p>
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Manufacturer</span>
+                        <span class="comparison-value">{{.ManufacturerName}}</span>
+                    </div>
 
-                <p><strong>Engine:</strong> {{.Engine}}</p>
-                <p><strong>Horsepower:</strong> {{.Horsepower}}</p>
-                <p><strong>Transmission:</strong> {{.Transmission}}</p>
-                <p><strong>Drivetrain:</strong> {{.Drivetrain}}</p>
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Country</span>
+                        <span class="comparison-value">{{.ManufacturerCountry}}</span>
+                    </div>
 
-                <form method="POST" action="/comparison/remove">
-                    <input type="hidden" name="id" value="{{.ID}}">
-                    <button type="submit" class="button">Remove from comparison</button>
-                </form>
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Category</span>
+                        <span class="comparison-value">{{.CategoryName}}</span>
+                    </div>
 
-                <hr>
-            </div>
-        {{end}}
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Engine</span>
+                        <span class="comparison-value">{{.Engine}}</span>
+                    </div>
+
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Horsepower</span>
+                        <span class="comparison-value">{{.Horsepower}}</span>
+                    </div>
+
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Transmission</span>
+                        <span class="comparison-value">{{.Transmission}}</span>
+                    </div>
+
+                    <div class="comparison-info-row">
+                        <span class="comparison-label">Drivetrain</span>
+                        <span class="comparison-value">{{.Drivetrain}}</span>
+                    </div>
+
+                    <form method="POST" action="/comparison/remove" style="text-align:center; margin-top: 15px;">
+                        <input type="hidden" name="id" value="{{.ID}}">
+                        <button type="submit" class="compare-btn">Remove from comparison</button>
+                    </form>
+                </div>
+            {{end}}
+        </div>
     {{else}}
-        <p>No cars added to comparison yet.</p>
+        <div class="comparison-empty">
+            <h2>No cars added to comparison yet</h2>
+            <p>
+                Go to the 
+                <a href="/" style="text-decoration: none;">main page</a> 
+                and click "Add to comparison" on cars you want to compare.
+            </p>
+        </div>
     {{end}}
-
+</div>
 </body>
 </html>
