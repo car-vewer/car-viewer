@@ -41,6 +41,7 @@ type PageData struct {
 	DrivetrainOptions   []string
 
 	Mains []Main
+	CompareCount int
 }
 
 type FilterOptions struct {
@@ -69,6 +70,7 @@ type Main struct {
 	Horsepower   int
 	Transmission string
 	Drivetrain   string
+	IsCompared bool
 }
 
 type  dataResult struct {
@@ -77,4 +79,8 @@ type  dataResult struct {
 	Categories []Category
 	Manufacturers []Manufacturer
 	Error error
+}
+
+type ComparisonPageData struct {
+	Cars []Main
 }

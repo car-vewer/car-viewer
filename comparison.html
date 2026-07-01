@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comparison</title>
+</head>
+<body>
+
+    <h1>Car comparison</h1>
+
+    <a href="/">Back to main page</a>
+
+    {{if .Cars}}
+        {{range .Cars}}
+            <div>
+                <h2>{{.Name}}</h2>
+
+                <img src="{{.Image}}" alt="{{.Name}}" width="300">
+
+                <p><strong>Year:</strong> {{.Year}}</p>
+                <p><strong>Manufacturer:</strong> {{.ManufacturerName}}</p>
+                <p><strong>Country:</strong> {{.ManufacturerCountry}}</p>
+                <p><strong>Category:</strong> {{.CategoryName}}</p>
+
+                <p><strong>Engine:</strong> {{.Engine}}</p>
+                <p><strong>Horsepower:</strong> {{.Horsepower}}</p>
+                <p><strong>Transmission:</strong> {{.Transmission}}</p>
+                <p><strong>Drivetrain:</strong> {{.Drivetrain}}</p>
+
+                <form method="POST" action="/comparison/remove">
+                    <input type="hidden" name="id" value="{{.ID}}">
+                    <button type="submit">Remove from comparison</button>
+                </form>
+
+                <hr>
+            </div>
+        {{end}}
+    {{else}}
+        <p>No cars added to comparison yet.</p>
+    {{end}}
+
+</body>
+</html>
