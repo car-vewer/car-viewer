@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Comparison</title>
+        <link rel="stylesheet" href="/static/style.css">
+
 </head>
 <body>
 
@@ -12,10 +14,10 @@
 
     {{if .Cars}}
         {{range .Cars}}
-            <div>
+            <div class="cars-grid">
                 <h2>{{.Name}}</h2>
 
-                <img src="{{.Image}}" alt="{{.Name}}" width="300">
+                <img src="http://localhost:3000/api/images/{{.Image}}" alt="{{.Name}}" width="300">
 
                 <p><strong>Year:</strong> {{.Year}}</p>
                 <p><strong>Manufacturer:</strong> {{.ManufacturerName}}</p>
@@ -29,7 +31,7 @@
 
                 <form method="POST" action="/comparison/remove">
                     <input type="hidden" name="id" value="{{.ID}}">
-                    <button type="submit">Remove from comparison</button>
+                    <button type="submit" class="button">Remove from comparison</button>
                 </form>
 
                 <hr>

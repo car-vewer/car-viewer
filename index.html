@@ -174,12 +174,12 @@
                         {{if .IsCompared}}
                             <form method="POST" action="/comparison/remove" style="display: inline;">
                                 <input type="hidden" name="id" value="{{.ID}}">
-                                <button type="submit">Remove from comparison</button>
+                                <button type="submit" class="button">Remove from comparison</button>
                             </form>
                         {{else}}
                             <form method="POST" action="/comparison/add" style="display: inline;">
                                 <input type="hidden" name="id" value="{{.ID}}">
-                                <button type="submit">Add to comparison</button>
+                                <button type="submit" class="button">Add to comparison</button>
                             </form>
                         {{end}}
                     </div>   
